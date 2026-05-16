@@ -24,3 +24,16 @@ This allows the server and client to be on the same port, therefore establishing
 
 ![2-2](assets/images/2-2.png)
 -----
+The next experiment includes the sender's IP address and port number in every broadcasted message. To achieve this, I made these changes to the server's handle connection:
+```Rust
+if let Some(text) = msg.as_text() {
+    println!("From client {addr:?} {text:?}");
+    // Added addr in the broadcasted message
+    let formatted_msg = format!("{addr}: {text}");
+    bcast_tx.send(formatted_msg.into())?;
+}
+```
+The addition of `{addr}` allows the client's address to be included in the broadcasted message. This can serve as an identifier for each client in the chat. This way, other clients can see who sent the chat. Since the changes are done on the server side, any modifications to it (like adding username) can be done on the server's code, making the logic more centralized. 
+
+![2-3](assets/images/2-3.png)
+
